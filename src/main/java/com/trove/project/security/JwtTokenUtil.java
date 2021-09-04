@@ -51,10 +51,6 @@ public class JwtTokenUtil implements InitializingBean {
 
 	private Key key;
 
-	public String getUserEmailFromToken(String token) {
-		return getClaimFromToken(token, Claims::getSubject);
-	}
-
 	public Date getExpirationDateFromToken(String token) {
 		return getClaimFromToken(token, Claims::getExpiration);
 	}
@@ -86,10 +82,10 @@ public class JwtTokenUtil implements InitializingBean {
 				.compact();
 	}
 
-	public String createToken(String email, String password, boolean pass) {
+	public String createToken(String username, String password, boolean pass) {
 		long now = (new Date()).getTime();
 		Date validity = new Date(now + this.tokenValidityInSecondsForVerify);
-		return Jwts.builder().setSubject(email).claim("password", password).signWith(key, SignatureAlgorithm.HS512)
+		return Jwts.builder().setSubject(username).claim("password", password).signWith(key, SignatureAlgorithm.HS512)
 				.setExpiration(validity).compact();
 	}
 

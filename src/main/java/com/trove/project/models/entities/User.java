@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.BatchSize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.trove.project.custom.annotations.ValidPassword;
 import com.trove.project.models.Auditable;
 
 import lombok.AccessLevel;
@@ -38,8 +39,12 @@ public class User extends Auditable {
 	private String lastname;
 
 	@NotNull
+	@Size(min = 4, max = 50)
+	@Column(unique = true, length = 50)
+	private String username;
+
+	@NotNull
 	@Email
-	@Size(min = 1, max = 50)
 	@Column(unique = true)
 	private String email;
 
@@ -48,7 +53,7 @@ public class User extends Auditable {
 
 	@JsonIgnore
 	@NotNull
-	@Size(min = 8, max = 100)
+	@ValidPassword
 	private String password;
 
 	@JsonIgnore
@@ -60,27 +65,26 @@ public class User extends Auditable {
 					@JoinColumn(name = "authority_name", referencedColumnName = "name") })
 	@BatchSize(size = 20)
 	private Set<Authority> authorities = new HashSet<>();
-	
+
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    @NotNull
-    private Portfolio portfolio;
+	@PrimaryKeyJoinColumn
+	@NotNull
+	private Portfolio portfolio;
 
 	public User() {
-		this.portfolio = new Portfolio();
+
 	}
 
 	public User(@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
-			@NotNull @Email @Size(min = 1, max = 50) String email, boolean verified,
+			@NotNull @Size(min = 4, max = 50) String username, @NotNull @Email String email,
 			@NotNull @Size(min = 8, max = 100) String password, Set<Authority> authorities) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
+		this.username = username;
 		this.email = email;
-		this.verified = verified;
 		this.password = password;
 		this.authorities = authorities;
-		this.portfolio = new Portfolio();
 	}
 
 	public void setFirstname(String firstname) {
@@ -108,6 +112,10 @@ public class User extends Auditable {
 		this.authorities = authorities;
 	}
 
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -126,7 +134,7 @@ public class User extends Auditable {
 	@Override
 	public String toString() {
 		return "User{" + "id=" + id + ", verified=" + verified + ", firstname=" + firstname + ", lastname=" + lastname
-				+ ", email=" + email + '}';
+				+ ", username=" + username + ", email=" + email + '}';
 	}
 
 }

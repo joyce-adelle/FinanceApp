@@ -2,9 +2,11 @@ package com.trove.project.repositories;
 
 import java.util.Optional;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -22,14 +24,18 @@ import com.trove.project.models.entities.User;
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	@EntityGraph(attributePaths = "authorities")
-	Optional<User> findOneWithAuthoritiesByEmail(String email);
+	Optional<User> findOneWithAuthoritiesByUsername(String username);
 
 	@EntityGraph(attributePaths = "authorities")
 	Optional<User> findOneWithAuthoritiesById(@NotNull @Min(1L) Long id);
 
-	Optional<User> findOneByEmail(@NotNull String email);
+	Optional<User> findOneByEmail(@Email @NotNull String email);
 
-	boolean existsByEmail(@NotNull String email);
+	Optional<User> findOneByUsername(@NotNull @Size(min = 4, max = 50) String username);
+
+	boolean existsByEmail(@Email @NotNull String email);
+
+	boolean existsByUsername(@NotNull @Size(min = 4, max = 50) String username);
 
 	@Modifying
 	@Query(value = "INSERT INTO user_authority (user_id, authority_name) VALUES (:userId, :authorityName)", nativeQuery = true)
@@ -45,4 +51,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	@NotNull
 	Slice<User> findAll(Pageable pageable);
+
 }

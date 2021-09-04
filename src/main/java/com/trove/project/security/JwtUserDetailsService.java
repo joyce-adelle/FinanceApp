@@ -1,7 +1,5 @@
 package com.trove.project.security;
 
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,19 +29,17 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(final String login) throws UsernameNotFoundException {
-		if (!new EmailValidator().isValid(login, null))
-			throw new UsernameNotFoundException("invalid email: " + login);
 
-		return userRepository.findOneWithAuthoritiesByEmail(login).map(user -> createSpringSecurityUser(login, user))
+		return userRepository.findOneWithAuthoritiesByUsername(login).map(user -> createSpringSecurityUser(login, user))
 				.orElseThrow(() -> new UsernameNotFoundException(
-						"User with email " + login + " was not found in the database"));
+						"User with username " + login + " was not found in the database"));
 	}
 
 	private UserAwareUserDetails createSpringSecurityUser(String lowercaseLogin, User user) {
 		List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
 				.map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
-		JwtUser jwtUser = new JwtUser(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(),
-				user.isVerified(), user.getPassword());
+		JwtUser jwtUser = new JwtUser(user.getId(), user.getFirstname(), user.getLastname(), user.getUsername(),
+				user.getEmail(), user.isVerified(), user.getPassword(), user.getPortfolio().getTotalValue());
 		return new UserAwareUserDetails(jwtUser, grantedAuthorities);
 	}
 }

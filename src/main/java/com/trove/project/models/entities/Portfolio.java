@@ -34,7 +34,7 @@ public class Portfolio {
 	@JsonIgnore
 	@OneToOne
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 	@OneToMany(mappedBy = "pk.user")
@@ -61,6 +61,11 @@ public class Portfolio {
 		}
 		this.wallet.add(sum);
 		return sum;
+	}
+	
+	public Portfolio() {
+		
+	
 	}
 
 }

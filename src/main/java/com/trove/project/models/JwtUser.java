@@ -1,7 +1,10 @@
 package com.trove.project.models;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
@@ -27,6 +30,10 @@ public class JwtUser {
 	@Size(min = 4, max = 50)
 	private String lastname;
 
+	@NotNull
+	@Size(min = 4, max = 50)
+	private String username;
+
 	@Email
 	@NotNull
 	private String email;
@@ -37,20 +44,28 @@ public class JwtUser {
 	@Size(min = 8, max = 100)
 	private String password;
 
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = true)
+	@Digits(integer = 12, fraction = 2)
+	private BigDecimal portfolioValue;
+
 	public JwtUser() {
 		super();
 	}
 
-	public JwtUser(@NotNull @Size(min = 1) Long id, @Size(min = 4, max = 50) String firstname,
-			@Size(min = 4, max = 50) String lastname, @Email String email, boolean verified,
-			@Size(min = 8, max = 100) String password) {
+	public JwtUser(@NotNull @Size(min = 1) Long id, @NotNull @Size(min = 4, max = 50) String firstname,
+			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String username,
+			@Email String email, boolean verified, @NotNull @Size(min = 8, max = 100) String password,
+			@NotNull @DecimalMin(value = "0.0", inclusive = true) @Digits(integer = 12, fraction = 2) BigDecimal portfolioValue) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
+		this.username = username;
 		this.email = email;
-		this.verified = verified;
 		this.password = password;
+		this.verified = verified;
+		this.portfolioValue = portfolioValue;
 	}
 
 	@Override
