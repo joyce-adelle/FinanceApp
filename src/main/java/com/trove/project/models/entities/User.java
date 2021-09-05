@@ -1,11 +1,14 @@
 package com.trove.project.models.entities;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,7 +16,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.BatchSize;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.trove.project.custom.annotations.ValidPassword;
 import com.trove.project.models.Auditable;
 
 import lombok.AccessLevel;
@@ -53,11 +55,16 @@ public class User extends Auditable {
 
 	@JsonIgnore
 	@NotNull
-	@ValidPassword
 	private String password;
 
 	@JsonIgnore
 	private Date verifiedAt;
+	
+	@Column(columnDefinition = "Decimal(12,2) default '0.00'")
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = true)
+	@Digits(integer = 12, fraction = 2)
+	private BigDecimal wallet = new BigDecimal(0.00);
 
 	@ManyToMany
 	@JoinTable(name = "user_authority", joinColumns = {
@@ -114,6 +121,10 @@ public class User extends Auditable {
 
 	public void setPortfolio(Portfolio portfolio) {
 		this.portfolio = portfolio;
+	}
+	
+	public void setWallet(BigDecimal wallet) {
+		this.wallet = wallet;
 	}
 
 	@Override

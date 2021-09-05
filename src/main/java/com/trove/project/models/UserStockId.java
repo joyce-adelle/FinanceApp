@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter(AccessLevel.PUBLIC)
 @Embeddable
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user")
-public class UserStockPk implements Serializable {
+public class UserStockId implements Serializable {
 	
 	private static final long serialVersionUID = 2774416467493234716L;
 

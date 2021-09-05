@@ -109,10 +109,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void create(@NotNull @Size(min = 4, max = 50) String firstname,
-			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String username,
-			@NotNull @Email String email, @NotNull @Size(min = 8, max = 100) String password)
-			throws ExistsException, TransactionException {
+	public void create(@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
+			@NotNull @Size(min = 4, max = 50) String username, @NotNull @Email @Size(min = 1, max = 50) String email,
+			@NotNull @Size(min = 8, max = 100) String password) throws ExistsException, TransactionException {
 
 		if (userRepository.existsByEmail(email)) {
 			throw new ExistsException("There is an account with email adress: " + email);

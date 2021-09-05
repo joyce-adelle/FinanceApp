@@ -4,6 +4,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.trove.project.custom.annotations.ValidPassword;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +32,7 @@ public class SignUpDto {
 	private String email;
 
 	@NotNull
-	@Size(min = 8, max = 100)
+	@ValidPassword
 	private String password;
 
 }

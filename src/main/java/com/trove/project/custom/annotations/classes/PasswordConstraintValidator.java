@@ -18,7 +18,7 @@ import com.trove.project.custom.annotations.ValidPassword;
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
 	@Override
-	public void initialize(final ValidPassword arg0) {
+	public void initialize(ValidPassword constraintAnnotation) {
 
 	}
 

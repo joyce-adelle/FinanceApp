@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.trove.project.models.UserStockPk;
+import com.trove.project.models.UserStockId;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,8 +23,9 @@ public class Shares {
 
 	@EmbeddedId
 	@JsonIgnore
-	private UserStockPk pk;
+	private UserStockId id;
 
+	@Positive
 	@NotNull
 	private Double quantity;
 
@@ -30,28 +33,28 @@ public class Shares {
 		super();
 	}
 
-	public Shares(@Valid User user, @Valid Stock stock, Double quantity) {
-		pk = new UserStockPk();
-		pk.setUser(user);
-		pk.setStock(stock);
+	public Shares(@Valid User user, @Valid Stock stock, @Positive @NotNull Double quantity) {
+		id = new UserStockId();
+		id.setUser(user);
+		id.setStock(stock);
 		this.quantity = quantity;
 	}
 
 	@Transient
 	public Stock getStock() {
-		return this.pk.getStock();
+		return this.id.getStock();
 	}
 
 	@Transient
 	public BigDecimal getValue() {
-		return this.pk.getStock().getPricePerShare().multiply(new BigDecimal(getQuantity())).setScale(2);
+		return this.id.getStock().getPricePerShare().multiply(new BigDecimal(getQuantity())).setScale(2);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((pk == null) ? 0 : pk.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 
 		return result;
 	}
@@ -68,11 +71,11 @@ public class Shares {
 			return false;
 		}
 		Shares other = (Shares) obj;
-		if (pk == null) {
-			if (other.pk != null) {
+		if (id == null) {
+			if (other.id != null) {
 				return false;
 			}
-		} else if (!pk.equals(other.pk)) {
+		} else if (!id.equals(other.id)) {
 			return false;
 		}
 
@@ -81,7 +84,7 @@ public class Shares {
 
 	@Override
 	public String toString() {
-		return "Shares{" + "userid=" + pk.getUser().getId() + ", quantity=" + quantity + ", dataplan="
+		return "Shares{" + "userid=" + id.getUser().getId() + ", quantity=" + quantity + ", stock="
 				+ this.getStock().toString() + '}';
 	}
 
