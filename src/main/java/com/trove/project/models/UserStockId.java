@@ -24,11 +24,11 @@ public class UserStockId implements Serializable {
 	
 	private static final long serialVersionUID = 2774416467493234716L;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "stock_id")
 	private Stock stock;
 

@@ -1,6 +1,7 @@
 package com.trove.project.models.entities;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +50,7 @@ public class Loan extends Auditable {
 	@NotNull
 	@DecimalMin(value = "0.0", inclusive = true)
 	@Digits(integer = 7, fraction = 2)
-	private BigDecimal amountPaid;
+	private BigDecimal amountPaid = new BigDecimal(0.00);
 
 	@Column(columnDefinition = "boolean default true")
 	private boolean active = true;
@@ -60,7 +61,7 @@ public class Loan extends Auditable {
 
 	public Loan(@NotNull @Positive Double monthlyInterestRate, @NotNull @Min(6) @Max(12) Integer numberOfMonths,
 			@NotNull @DecimalMin(value = "1.0", inclusive = true) @Digits(integer = 7, fraction = 2) BigDecimal loanAmount) {
-		
+
 		this.monthlyInterestRate = monthlyInterestRate;
 		this.numberOfMonths = numberOfMonths;
 		this.loanAmount = loanAmount;
@@ -69,16 +70,17 @@ public class Loan extends Auditable {
 	@Transient
 	public BigDecimal getMonthlyPayment() {
 
-		return this.loanAmount.multiply(
-				new BigDecimal((this.monthlyInterestRate * Math.pow(1 + this.monthlyInterestRate, this.numberOfMonths))
-						/ (Math.pow(1 + this.monthlyInterestRate, this.numberOfMonths) - 1)))
-				.setScale(2);
+		return this.loanAmount
+				.multiply(new BigDecimal(
+						(this.monthlyInterestRate * Math.pow(1 + this.monthlyInterestRate, this.numberOfMonths))
+								/ (Math.pow(1 + this.monthlyInterestRate, this.numberOfMonths) - 1)))
+				.setScale(2, RoundingMode.UP);
 
 	}
 
 	@Transient
 	public BigDecimal getTotalPayment() {
-		return getMonthlyPayment().multiply(new BigDecimal(this.numberOfMonths)).setScale(2);
+		return getMonthlyPayment().multiply(new BigDecimal(this.numberOfMonths)).setScale(2, RoundingMode.UP);
 	}
 
 	@Transient

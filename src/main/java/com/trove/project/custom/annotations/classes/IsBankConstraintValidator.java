@@ -19,6 +19,13 @@ public class IsBankConstraintValidator implements ConstraintValidator<IsBank, St
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
+
+		if (value == null)
+			return false;
+
+		if (value.isBlank())
+			return false;
+
 		if (list.contains(value.toLowerCase()))
 			return true;
 		return false;

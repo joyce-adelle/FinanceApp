@@ -1,6 +1,7 @@
 package com.trove.project.services.implementations;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -41,7 +42,8 @@ public class LoanServiceImpl implements LoanService {
 		JwtUser user = SecurityUtils.getCurrentUser()
 				.orElseThrow(() -> new ResourceNotFoundException("User not found"));
 		BigDecimal value = user.getPortfolioValue();
-		BigDecimal maxLoan = value.multiply(new BigDecimal(0.6));
+		BigDecimal maxLoan = value.multiply(new BigDecimal(0.6)).setScale(2, RoundingMode.UP);
+
 		if (amount.subtract(maxLoan).signum() > 0)
 			throw new IllegalOperationException("cannot loan that amount. maximum loan is " + maxLoan);
 
@@ -50,6 +52,7 @@ public class LoanServiceImpl implements LoanService {
 
 		// code to send money to bank account
 
+		//fixed 18% annual interest
 		return this.loanRepository.save(new Loan(0.015, numberOfMonths, amount));
 	}
 
