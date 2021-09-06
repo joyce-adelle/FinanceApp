@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
@@ -32,6 +33,7 @@ public class Stock {
 
 	@Column(length = 10, unique = true)
 	@NotNull
+	@Pattern(regexp = "[A-Z]+", message = "symbol should be in upper case and without spaces")
 	@Size(min = 4, max = 10)
 	private String symbol;
 
@@ -49,10 +51,11 @@ public class Stock {
 
 	}
 
-	public Stock(@NotNull @Size(min = 4, max = 100) String name, @NotNull @Size(min = 4, max = 10) String symbol,
+	public Stock(@NotNull @Size(min = 4, max = 100) String name,
+			@NotNull @Pattern(regexp = "[A-Z]+") @Size(min = 4, max = 10) String symbol,
 			@NotNull @DecimalMin(value = "1.0", inclusive = true) @Digits(integer = 7, fraction = 2) BigDecimal pricePerShare,
 			@NotNull @Positive Double equityValue) {
-		super();
+
 		this.name = name;
 		this.symbol = symbol;
 		this.pricePerShare = pricePerShare;

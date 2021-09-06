@@ -1,0 +1,54 @@
+{
+	"properties": [
+		{
+			"name": "jwt.secret",
+			"type": "java.lang.String",
+			"description": "jwt secret key"
+		},
+		{
+			"name": "jwt.token-validity-in-seconds",
+			"type": "java.lang.String",
+			"description": "jwt token validity in seconds"
+		},
+		{
+			"name": "jwt.token-validity-in-seconds-for-remember-me",
+			"type": "java.lang.String",
+			"description": "jwt token validity in seconds if 'remember-me' is true"
+		},
+		{
+			"name": "jwt.token-validity-in-seconds-for-verify",
+			"type": "java.lang.String",
+			"description": "jwt token validity in seconds for all verifications"
+		},
+		{
+			"name": "verify.url",
+			"type": "java.lang.String",
+			"description": "url for verification of email"
+		},
+		{
+			"name": "resetPassword.url",
+			"type": "java.lang.String",
+			"description": "url to reset password"
+		},
+		{
+			"name": "forgotPassword.url",
+			"type": "java.lang.String",
+			"description": "url for forgotten passwords"
+		},
+		{
+			"name": "payment.callback.url",
+			"type": "java.lang.String",
+			"description": "callback url after payment of loans"
+		},
+		{
+			"name": "top-up.callback.url",
+			"type": "java.lang.String",
+			"description": "callback url after wallet top up"
+		},
+		{
+			"name": "paystack.secret",
+			"type": "java.lang.String",
+			"description": "current paystack secret in use either test or production"
+		}
+	]
+}

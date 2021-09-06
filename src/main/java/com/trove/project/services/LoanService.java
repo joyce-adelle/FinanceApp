@@ -28,12 +28,6 @@ public interface LoanService {
 			throws IllegalOperationException;
 
 	@NotNull
-	void payPeriodicLoanInit();
-
-	@NotNull
-	Loan payPeriodicLoanFinish();
-
-	@NotNull
 	Slice<Loan> viewAllLoans(Pageable pageable);
 
 	@NotNull

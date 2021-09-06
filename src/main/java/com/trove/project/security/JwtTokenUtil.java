@@ -71,9 +71,9 @@ public class JwtTokenUtil implements InitializingBean {
 		long now = (new Date()).getTime();
 		Date validity;
 		if (rememberMe) {
-			validity = new Date(now + this.tokenValidityInSecondsForRememberMe);
+			validity = new Date(now + this.tokenValidityInSecondsForRememberMe * 1000);
 		} else {
-			validity = new Date(now + this.tokenValidityInSeconds);
+			validity = new Date(now + this.tokenValidityInSeconds * 1000);
 		}
 
 		return Jwts.builder().setSubject(authentication.getName())
@@ -84,14 +84,14 @@ public class JwtTokenUtil implements InitializingBean {
 
 	public String createToken(String username, String password, boolean pass) {
 		long now = (new Date()).getTime();
-		Date validity = new Date(now + this.tokenValidityInSecondsForVerify);
+		Date validity = new Date(now + this.tokenValidityInSecondsForVerify * 1000);
 		return Jwts.builder().setSubject(username).claim("password", password).signWith(key, SignatureAlgorithm.HS512)
 				.setExpiration(validity).compact();
 	}
 
 	public String createToken(String oldEmail, String newEmail) {
 		long now = (new Date()).getTime();
-		Date validity = new Date(now + this.tokenValidityInSecondsForVerify);
+		Date validity = new Date(now + this.tokenValidityInSecondsForVerify * 1000);
 
 		return Jwts.builder().claim("oldEmail", oldEmail).claim("newEmail", newEmail)
 				.signWith(key, SignatureAlgorithm.HS512).setExpiration(validity).compact();

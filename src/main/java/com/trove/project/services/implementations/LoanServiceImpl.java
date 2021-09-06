@@ -54,18 +54,6 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 	@Override
-	public void payPeriodicLoanInit() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public @NotNull Loan payPeriodicLoanFinish() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public @NotNull Slice<Loan> viewAllLoans(Pageable pageable) {
 
 		Long id = SecurityUtils.getCurrentUserId().orElseThrow(() -> new ResourceNotFoundException("User not found"));

@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,8 +83,8 @@ public class UserServiceImpl implements UserService {
 	private String forgotPasswordUrl;
 
 	@Override
-	public String login(@NotNull @Size(min = 4, max = 50) String username,
-			@NotNull @Size(min = 8, max = 100) String password, Boolean rememberMe) {
+	public String login(@NotNull @Size(min = 4, max = 50) String username, @NotNull @ValidPassword String password,
+			Boolean rememberMe) {
 
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
 				password);
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getCurrentUserWithAuthorities() {
+		System.out.println(SecurityUtils.getCurrentUsername());
 		return SecurityUtils.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found"));
 	}
@@ -109,9 +111,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void create(@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
-			@NotNull @Size(min = 4, max = 50) String username, @NotNull @Email @Size(min = 1, max = 50) String email,
-			@NotNull @Size(min = 8, max = 100) String password) throws ExistsException, TransactionException {
+	public void create(@NotNull @Size(min = 4, max = 50) String firstname,
+			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String username,
+			@NotNull @Email @Size(min = 1, max = 50) String email, @NotNull @ValidPassword String password)
+			throws ExistsException, TransactionException {
 
 		if (userRepository.existsByEmail(email)) {
 			throw new ExistsException("There is an account with email adress: " + email);
@@ -126,10 +129,10 @@ public class UserServiceImpl implements UserService {
 
 		User user = new User(firstname, lastname, username, email, passwordEncoder.encode(password), authorities);
 		Portfolio portfolio = new Portfolio();
-		
+
 		user.setPortfolio(portfolio);
 		portfolio.setUser(user);
-		
+
 		userRepository.save(user);
 
 		try {
@@ -161,8 +164,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void resetPasswordFinish(@NotNull @NotEmpty String token,
-			@NotNull @ValidPassword String oldPassword,
+	public void resetPasswordFinish(@NotNull @NotEmpty String token, @NotNull @ValidPassword String oldPassword,
 			@NotNull @ValidPassword String newPassword) throws IllegalOperationException {
 		try {
 
@@ -258,25 +260,33 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addAuthority(@NotNull @Min(1L) Long userId, @NotNull @NotEmpty String authorityName) {
-		if (!userRepository.existsById(userId))
-			throw new ResourceNotFoundException("User not found");
-		if (!authorityRepository.existsById(authorityName))
-			throw new ResourceNotFoundException("Authority not found");
+	public User addAuthority(@NotNull @Min(1L) Long userId,
+			@NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) String authorityName) {
 
-		userRepository.addAuthority(userId, authorityName);
+		User user = this.getUserWithAuthorities(userId);
+		Authority authority = this.authorityRepository.findById(authorityName)
+				.orElseThrow(() -> new ResourceNotFoundException("Authority not found"));
+
+		user.addAuthority(authority);
+
+		this.userRepository.save(user);
+		return this.getUserWithAuthorities(userId);
 
 	}
 
 	@Override
-	public void removeAuthority(@NotNull @Min(1L) Long userId,
-			@NotNull @NotEmpty @NotEquals(notEqualValue = "user") String authorityName) {
-		if (!userRepository.existsById(userId))
-			throw new ResourceNotFoundException("User not found");
-		if (!authorityRepository.existsById(authorityName))
-			throw new ResourceNotFoundException("Authority not found");
+	public User removeAuthority(@NotNull @Min(1L) Long userId,
+			@NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) @NotEquals(notEqualValue = "user") String authorityName) {
 
-		userRepository.removeAuthority(userId, authorityName);
+		User user = this.getUserWithAuthorities(userId);
+		Authority authority = this.authorityRepository.findById(authorityName)
+				.orElseThrow(() -> new ResourceNotFoundException("Authority not found"));
+
+		user.removeAuthority(authority);
+
+		this.userRepository.save(user);
+
+		return this.getUserWithAuthorities(userId);
 	}
 
 	private void verifyInit(String oldEmail, String newEmail, String name, String template) throws MessagingException {

@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.domain.Pageable;
@@ -26,12 +27,12 @@ public interface UserService {
 
 	User getCurrentUserWithAuthorities();
 
-	String login(@NotNull @Size(min = 4, max = 50) String username, @NotNull @Size(min = 8, max = 100) String password,
+	String login(@NotNull @Size(min = 4, max = 50) String username, @NotNull @ValidPassword String password,
 			Boolean rememberMe);
 
 	void create(@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
 			@NotNull @Size(min = 4, max = 50) String username, @NotNull @Email @Size(min = 1, max = 50) String email,
-			@NotNull @Size(min = 8, max = 100) String password) throws ExistsException, TransactionException;
+			@NotNull @ValidPassword String password) throws ExistsException, TransactionException;
 
 	void resetPasswordInit() throws TransactionException;
 
@@ -46,10 +47,11 @@ public interface UserService {
 
 	void verifyFinish(@NotNull @NotEmpty String token) throws TransactionException, IllegalOperationException;
 
-	void addAuthority(@NotNull @Min(1L) Long userId, @NotNull @NotEmpty String authorityName);
+	User addAuthority(@NotNull @Min(1L) Long userId,
+			@NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) String authorityName);
 
-	void removeAuthority(@NotNull @Min(1L) Long userId,
-			@NotNull @NotEmpty @NotEquals(notEqualValue = "user") String authorityName);
+	User removeAuthority(@NotNull @Min(1L) Long userId,
+			@NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) @NotEquals(notEqualValue = "user") String authorityName);
 
 	User getUserWithAuthorities(@NotNull @Min(1) Long userId);
 

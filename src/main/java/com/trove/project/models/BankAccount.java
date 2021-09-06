@@ -20,4 +20,14 @@ public class BankAccount {
 	@IsBank
 	private String bankName;
 
+	public BankAccount(@NotNull String accountName,
+			@NotNull @Size(min = 10, max = 10, message = "Bank account number should be 10 digits") @Pattern(regexp = "^[0-9]+$") String bankAccountNo,
+			@NotNull String bankName) {
+
+		this.accountName = accountName;
+		this.bankAccountNo = bankAccountNo;
+		this.bankName = bankName;
+
+	}
+
 }

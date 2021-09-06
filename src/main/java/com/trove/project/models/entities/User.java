@@ -59,7 +59,7 @@ public class User extends Auditable {
 
 	@JsonIgnore
 	private Date verifiedAt;
-	
+
 	@Column(columnDefinition = "Decimal(12,2) default '0.00'")
 	@NotNull
 	@DecimalMin(value = "0.0", inclusive = true)
@@ -115,14 +115,18 @@ public class User extends Auditable {
 		this.password = password;
 	}
 
-	public void setAuthorities(Set<Authority> authorities) {
-		this.authorities = authorities;
+	public void addAuthority(Authority authority) {
+		this.authorities.add(authority);
+	}
+
+	public void removeAuthority(Authority authority) {
+		this.authorities.remove(authority);
 	}
 
 	public void setPortfolio(Portfolio portfolio) {
 		this.portfolio = portfolio;
 	}
-	
+
 	public void setWallet(BigDecimal wallet) {
 		this.wallet = wallet;
 	}

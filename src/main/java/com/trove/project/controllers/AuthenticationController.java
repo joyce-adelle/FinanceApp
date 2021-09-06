@@ -49,7 +49,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/signup")
-	ResponseEntity<CompletedRequestDto> addUser(@RequestBody @Valid @NotNull(message = "The user cannot be null.") SignUpDto user)
+	ResponseEntity<CompletedRequestDto> signUp(@RequestBody @Valid @NotNull(message = "The user cannot be null.") SignUpDto user)
 			throws ExistsException, TransactionException {
 
 		userService.create(user.getFirstname(), user.getLastname(), user.getUsername(), user.getEmail(), user.getPassword());;

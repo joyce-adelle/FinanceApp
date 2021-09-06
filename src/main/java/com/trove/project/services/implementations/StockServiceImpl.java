@@ -2,11 +2,11 @@ package com.trove.project.services.implementations;
 
 import java.math.BigDecimal;
 
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.trove.project.exceptions.ExistsException;
 import com.trove.project.exceptions.IllegalOperationException;
 import com.trove.project.exceptions.ResourceNotFoundException;
 import com.trove.project.models.entities.Stock;
@@ -35,23 +36,20 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	public @NotNull Stock createStock(@NotNull @Size(min = 4, max = 100) String name,
-			@NotNull @Size(min = 4, max = 10) String symbol,
+			@NotNull @Pattern(regexp = "[A-Z]+", message = "symbol should be in upper case and without spaces") @Size(min = 4, max = 10) String symbol,
 			@NotNull @DecimalMin(value = "1.0", inclusive = true) @Digits(integer = 7, fraction = 2) BigDecimal pricePerShare,
-			@NotNull @Positive Double equityValue) {
+			@NotNull @Positive Double equityValue) throws ExistsException {
 
-		return this.stockRepository.save(new Stock(name, symbol, pricePerShare, equityValue));
+		if (this.stockRepository.existsBySymbol(symbol))
+			throw new ExistsException("There is a stock with symbol: " + symbol);
+
+		return this.stockRepository.save(new Stock(name, symbol.toUpperCase(), pricePerShare, equityValue));
 	}
 
 	@Override
 	public @NotNull Slice<Stock> getAllStocks(Pageable pageable) {
 
 		return this.stockRepository.findAll(pageable);
-	}
-
-	@Override
-	public @NotNull Stock updateStock(@NotNull @Valid Stock stock) {
-
-		return this.stockRepository.save(stock);
 	}
 
 	@Override
@@ -69,6 +67,25 @@ public class StockServiceImpl implements StockService {
 
 		return this.stockRepository.findById(stockId)
 				.orElseThrow(() -> new ResourceNotFoundException("Stock not found"));
+	}
+
+	@Override
+	public @NotNull Stock updatePricePerShare(@NotNull @Min(1) Long stockId,
+			@NotNull @DecimalMin(value = "1.0", inclusive = true) @Digits(integer = 7, fraction = 2) BigDecimal pricePerShare) {
+
+		Stock stock = this.getStock(stockId);
+		stock.setPricePerShare(pricePerShare);
+
+		return this.stockRepository.save(stock);
+	}
+
+	@Override
+	public @NotNull Stock updateEquityValue(@NotNull @Min(1) Long stockId, @NotNull @Positive Double equityValue) {
+
+		Stock stock = this.getStock(stockId);
+		stock.setEquityValue(equityValue);
+
+		return this.stockRepository.save(stock);
 	}
 
 }

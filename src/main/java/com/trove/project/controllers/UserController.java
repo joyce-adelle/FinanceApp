@@ -22,8 +22,11 @@ import com.trove.project.exceptions.TransactionException;
 import com.trove.project.models.dtos.AuthorityDto;
 import com.trove.project.models.dtos.CompletedRequestDto;
 import com.trove.project.models.dtos.EmailDto;
+import com.trove.project.models.dtos.InitializePaymentWithPaystackDto;
+import com.trove.project.models.dtos.TopUpDto;
 import com.trove.project.models.dtos.UpdateUserDto;
 import com.trove.project.models.entities.User;
+import com.trove.project.services.PaymentService;
 import com.trove.project.services.UserService;
 
 @RestController
@@ -32,6 +35,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private PaymentService paymentService;
 
 	@GetMapping(value = { "", "/", "/page" })
 	public ResponseEntity<Slice<User>> getUsers(Pageable pageable) {
@@ -91,5 +97,12 @@ public class UserController {
 	public ResponseEntity<CompletedRequestDto> resetPassword() throws TransactionException {
 		userService.resetPasswordInit();
 		return ResponseEntity.ok(new CompletedRequestDto(true));
+	}
+
+	@PutMapping("/user/top-up-wallet")
+	public ResponseEntity<InitializePaymentWithPaystackDto> topUserWallet(@Valid @RequestBody TopUpDto topUp)
+			throws TransactionException, IllegalOperationException {
+		return ResponseEntity.ok(
+				new InitializePaymentWithPaystackDto(this.paymentService.topUpWalletWithPaystack(topUp.getAmount())));
 	}
 }

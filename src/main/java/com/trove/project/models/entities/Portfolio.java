@@ -42,12 +42,13 @@ public class Portfolio {
 
 	@Transient
 	public BigDecimal getTotalValue() {
+
 		BigDecimal sum = new BigDecimal(0.00);
 		for (Shares share : this.shares) {
 			sum = sum.add(share.getValue());
 		}
-		this.user.getWallet().add(sum);
-		return sum;
+
+		return this.user.getWallet().add(sum);
 	}
 
 	public Portfolio() {

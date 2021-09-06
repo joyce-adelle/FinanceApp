@@ -20,9 +20,9 @@ public class SecurityUtils {
 	}
 
 	/**
-	 * Get the email of the current user.
+	 * Get the username of the current user.
 	 *
-	 * @return the email of the current user.
+	 * @return the username of the current user.
 	 */
 	public static Optional<String> getCurrentUsername() {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

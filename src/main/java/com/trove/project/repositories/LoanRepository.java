@@ -8,9 +8,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import com.trove.project.models.entities.Loan;
 
+@Repository
 public interface LoanRepository extends CrudRepository<Loan, Long> {
 
 	@NotNull

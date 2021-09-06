@@ -2,6 +2,9 @@ package com.trove.project.repositories;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +16,8 @@ import com.trove.project.models.entities.User;
 @Repository
 public interface SharesRepository extends CrudRepository<Shares, UserStockId> {
 
-	Optional<Shares> findOneByIdUserAndIdStock(User user, Stock stock);
+	Optional<Shares> findOneByIdUserAndIdStock(@NotNull @Valid User user, @NotNull @Valid Stock stock);
 
-	boolean existsByIdStock(Stock stock);
+	boolean existsByIdStock(@NotNull @Valid Stock stock);
 
 }

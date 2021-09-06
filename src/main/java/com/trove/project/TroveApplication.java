@@ -47,7 +47,7 @@ public class TroveApplication {
 			portfolio.setUser(user);
 			userRepository.save(user);
 
-			stockRepository.save(new Stock("Amazon", "Amzn", new BigDecimal(2.0), 2.0));
+			stockRepository.save(new Stock("Amazon", "AMZN", new BigDecimal(2.0), 2.0));
 
 			authorities.add(adminAuth);
 
