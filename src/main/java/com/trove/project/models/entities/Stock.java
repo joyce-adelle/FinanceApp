@@ -46,7 +46,7 @@ public class Stock extends Auditable {
 	@NotNull
 	@DecimalMin(value = "1.0", inclusive = true)
 	@Digits(integer = 7, fraction = 2)
-	private BigDecimal pricePerShare = new BigDecimal(1.00);
+	private BigDecimal pricePerShare = new BigDecimal(1);
 
 	@NotNull
 	@Positive

@@ -50,7 +50,7 @@ public class Loan extends Auditable {
 	@NotNull
 	@DecimalMin(value = "0.0", inclusive = true)
 	@Digits(integer = 7, fraction = 2)
-	private BigDecimal amountPaid = new BigDecimal(0.00);
+	private BigDecimal amountPaid = new BigDecimal(0);
 
 	@Column(columnDefinition = "boolean default true")
 	private boolean active = true;

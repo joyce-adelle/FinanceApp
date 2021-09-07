@@ -64,7 +64,7 @@ public class User extends Auditable {
 	@NotNull
 	@DecimalMin(value = "0.0", inclusive = true)
 	@Digits(integer = 12, fraction = 2)
-	private BigDecimal wallet = new BigDecimal(0.00);
+	private BigDecimal wallet = new BigDecimal(0);
 
 	@ManyToMany
 	@JoinTable(name = "user_authority", joinColumns = {
