@@ -22,6 +22,9 @@ import com.trove.project.models.dtos.CompletedRequestDto;
 import com.trove.project.models.entities.Authority;
 import com.trove.project.services.AuthorityService;
 
+/*
+ * Controller to handle available roles
+ */
 @RestController
 @RequestMapping("/api/authority")
 public class AuthorityController {
@@ -35,7 +38,7 @@ public class AuthorityController {
 		return ResponseEntity.ok(this.authorityService.getAllAuthorities());
 	}
 
-	@PostMapping(value = { "", "/" })
+	@PostMapping("/admin")
 	ResponseEntity<Authority> createAuthority(
 			@RequestBody @Valid @NotNull(message = "The user cannot be null.") AuthorityDto authority)
 			throws ExistsException {
@@ -43,7 +46,7 @@ public class AuthorityController {
 		return ResponseEntity.ok(this.authorityService.create(authority.getAuthorityName()));
 	}
 
-	@DeleteMapping("/{authorityName}")
+	@DeleteMapping("admin/{authorityName}")
 	public ResponseEntity<CompletedRequestDto> deleteStock(
 			@PathVariable @NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) @NotEquals(notEqualValue = "user") String authorityName) {
 		this.authorityService.remove(authorityName);

@@ -29,6 +29,9 @@ import com.trove.project.models.entities.User;
 import com.trove.project.services.PaymentService;
 import com.trove.project.services.UserService;
 
+/*
+ * Controller to handle user
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -39,7 +42,8 @@ public class UserController {
 	@Autowired
 	private PaymentService paymentService;
 
-	@GetMapping(value = { "", "/", "/page" })
+	// admin page to view all users, maybe to make one an admin or verify payments
+	@GetMapping(value = { "/admin", "/admin/page" })
 	public ResponseEntity<Slice<User>> getUsers(Pageable pageable) {
 		return ResponseEntity.ok(userService.getAllusers(pageable));
 	}
@@ -59,12 +63,13 @@ public class UserController {
 		return ResponseEntity.ok(userService.getCurrentUserWithAuthorities());
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/admin/{id}")
 	public ResponseEntity<User> getUser(@PathVariable @NotNull @Min(value = 1L, message = "Invalid id.") Long id) {
 		return ResponseEntity.ok(userService.getUserWithAuthorities(id));
 	}
 
-	@PutMapping("/{id}/addauthority")
+	// add an authority for a user
+	@PutMapping("/admin/{id}/addauthority")
 	public ResponseEntity<CompletedRequestDto> addUserAuthority(
 			@PathVariable @NotNull @Min(value = 1L, message = "Invalid id.") Long id,
 			@Valid @RequestBody AuthorityDto authority) {
@@ -72,7 +77,8 @@ public class UserController {
 		return ResponseEntity.ok(new CompletedRequestDto(true));
 	}
 
-	@PutMapping("/{id}/removeauthority")
+	// remove authority of a user
+	@PutMapping("/admin/{id}/removeauthority")
 	public ResponseEntity<CompletedRequestDto> removeUserAuthority(
 			@PathVariable @NotNull @Min(value = 1L, message = "Invalid id.") Long id,
 			@Valid @RequestBody AuthorityDto authority) {
@@ -99,6 +105,7 @@ public class UserController {
 		return ResponseEntity.ok(new CompletedRequestDto(true));
 	}
 
+	// top up wallet using paystack
 	@PutMapping("/user/top-up-wallet")
 	public ResponseEntity<InitializePaymentWithPaystackDto> topUserWallet(@Valid @RequestBody TopUpDto topUp)
 			throws TransactionException, IllegalOperationException {

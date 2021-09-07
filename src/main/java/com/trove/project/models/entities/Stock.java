@@ -13,14 +13,19 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+import com.trove.project.models.Auditable;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/*
+ * Represents each company's stock of which shares can be bought
+ */
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @Entity
-public class Stock {
+public class Stock extends Auditable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

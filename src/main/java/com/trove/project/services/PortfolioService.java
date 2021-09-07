@@ -11,9 +11,19 @@ import com.trove.project.models.entities.Portfolio;
 @Validated
 public interface PortfolioService {
 
+	/**
+	 * get current user portfolio.
+	 *
+	 * @return user portfolio.
+	 */
 	@NotNull
 	Portfolio getPortfolio();
 
+	/**
+	 * get current user portfolio value.
+	 *
+	 * @return user portfolio value.
+	 */
 	@NotNull
 	BigDecimal getTotalPortfolioValue();
 

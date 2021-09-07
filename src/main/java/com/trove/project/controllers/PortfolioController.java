@@ -17,6 +17,10 @@ import com.trove.project.models.entities.Portfolio;
 import com.trove.project.services.PortfolioService;
 import com.trove.project.services.SharesService;
 
+/*
+ * Controller to handle user's portfolio 
+ * and to allow user buy and sell shares
+ */
 @RestController
 @RequestMapping("/api/users/user/portfolio")
 public class PortfolioController {

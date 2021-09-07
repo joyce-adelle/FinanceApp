@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.trove.project.models.JwtUser;
 import com.trove.project.models.UserAwareUserDetails;
 
+/*
+ * Utility class to get details of logged in user
+ */
 public class SecurityUtils {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SecurityUtils.class);

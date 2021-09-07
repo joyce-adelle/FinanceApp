@@ -14,6 +14,9 @@ import javax.validation.Payload;
 
 import com.trove.project.custom.annotations.classes.IsBankConstraintValidator;
 
+/*
+ * Annotation to verify a bank name
+ */
 @Constraint(validatedBy = IsBankConstraintValidator.class)
 @Target({ PARAMETER, FIELD, TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)

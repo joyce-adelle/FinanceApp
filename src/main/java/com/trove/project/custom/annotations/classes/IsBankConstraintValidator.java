@@ -7,6 +7,9 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.trove.project.custom.annotations.IsBank;
 
+/*
+ * Validator for a bank name
+ */
 public class IsBankConstraintValidator implements ConstraintValidator<IsBank, String> {
 
 	final List<String> list = List.of("fidelity bank", "guaranty trust bank", "united bank for africa", "access bank",

@@ -27,6 +27,9 @@ import com.trove.project.models.dtos.UpdatePricePerShareDto;
 import com.trove.project.models.entities.Stock;
 import com.trove.project.services.StockService;
 
+/*
+ * Controller to handle all stocks
+ */
 @RestController
 @RequestMapping("/api/stock")
 public class StockController {
@@ -39,7 +42,7 @@ public class StockController {
 		return ResponseEntity.ok(this.stockService.getAllStocks(pageable));
 	}
 
-	@PostMapping("/create")
+	@PostMapping("/admin")
 	ResponseEntity<Stock> createStock(@RequestBody @Valid @NotNull(message = "The user cannot be null.") StockDto stock)
 			throws ExistsException, TransactionException {
 
@@ -47,7 +50,7 @@ public class StockController {
 				stock.getPricePerShare(), stock.getEquityValue()));
 	}
 
-	@PutMapping("/stock/{id}/price")
+	@PutMapping("/admin/{id}/price")
 	public ResponseEntity<Stock> updatePricePerShare(
 			@PathVariable @NotNull @Min(value = 1L, message = "Invalid id.") Long id,
 			@Valid @RequestBody UpdatePricePerShareDto pricePerShare) {
@@ -55,7 +58,7 @@ public class StockController {
 		return ResponseEntity.ok(this.stockService.updatePricePerShare(id, pricePerShare.getPricePerShare()));
 	}
 
-	@PutMapping("/stock/{id}/equity-value")
+	@PutMapping("/admin/{id}/equity-value")
 	public ResponseEntity<Stock> updateEquityValue(
 			@PathVariable @NotNull @Min(value = 1L, message = "Invalid id.") Long id,
 			@Valid @RequestBody UpdateEquityValueDto equityValue) {
@@ -63,7 +66,7 @@ public class StockController {
 		return ResponseEntity.ok(this.stockService.updateEquityValue(id, equityValue.getEquityValue()));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/admin/{id}")
 	public ResponseEntity<CompletedRequestDto> deleteStock(
 			@PathVariable @NotNull @Min(value = 1L, message = "Invalid id.") Long id) throws IllegalOperationException {
 		this.stockService.deleteStock(id);

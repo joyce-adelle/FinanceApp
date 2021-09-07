@@ -21,15 +21,31 @@ import com.trove.project.models.entities.Loan;
 @Validated
 public interface LoanService {
 
+	/**
+	 * create a loan.
+	 *
+	 * @return newly created loan.
+	 */
 	@NotNull
 	Loan takeLoan(
 			@NotNull @DecimalMin(value = "1.0", inclusive = true) @Digits(integer = 7, fraction = 2) BigDecimal amount,
 			@NotNull @Min(6) @Max(12) Integer numberOfMonths, @NotNull @Valid BankAccount bankAccount)
 			throws IllegalOperationException;
 
+	/**
+	 * get all user loans.
+	 *
+	 * @return all loans by user.
+	 */
 	@NotNull
 	Slice<Loan> viewAllLoans(Pageable pageable);
 
+	/**
+	 * user active loan.
+	 *
+	 * @return a list with active loan which is of size 1 
+	 * as user can only have one active loan.
+	 */
 	@NotNull
 	List<Loan> viewActiveLoan();
 

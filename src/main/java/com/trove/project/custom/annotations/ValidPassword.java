@@ -15,16 +15,19 @@ import javax.validation.Payload;
 
 import com.trove.project.custom.annotations.classes.PasswordConstraintValidator;
 
+/*
+ * Annotation to verify a password
+ */
 @Documented
 @Constraint(validatedBy = PasswordConstraintValidator.class)
 @Target({ PARAMETER, FIELD, TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 public @interface ValidPassword {
 
-    String message() default "Invalid Password";
+	String message() default "Invalid Password";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
 }

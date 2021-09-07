@@ -1,7 +1,6 @@
 package com.trove.project.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,8 +19,10 @@ import com.trove.project.security.JwtAccessDeniedHandler;
 import com.trove.project.security.JwtAuthenticationEntryPoint;
 import com.trove.project.security.JwtFilter;
 
+/*
+ * configuring details for api security
+ */
 @Configuration
-@EnableCaching
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -70,14 +71,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// create no session
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-				.and().authorizeRequests().antMatchers("/api/login").permitAll().antMatchers("/api/register")
-				.permitAll().antMatchers("/api/verify/init").permitAll().antMatchers("/api/verify/finish").permitAll()
+				.and().authorizeRequests().antMatchers("/api/login").permitAll().antMatchers("/api/signup").permitAll()
+				.antMatchers("/api/verify/init").permitAll().antMatchers("/api/verify/finish").permitAll()
 				.antMatchers("/api/reset-password/init").permitAll().antMatchers("/api/reset-password/finish")
 				.permitAll().antMatchers("/api/forgot-password").permitAll().antMatchers("/api/payments/verify/topup")
 				.permitAll().antMatchers("/api/payments/webhook/verify").permitAll()
 
-				.antMatchers("/api/users").hasAuthority("user")
-				// .antMatchers("/api/hiddenmessage").hasAuthority("admin")
+				.antMatchers("/api/users/**").hasAuthority("user").antMatchers("/api/**/admin/**").hasAuthority("admin")
 
 				.anyRequest().authenticated();
 

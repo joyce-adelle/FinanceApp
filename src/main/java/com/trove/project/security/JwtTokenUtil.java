@@ -31,6 +31,9 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+/*
+ * Utility class to use jwt
+ */
 @Component
 public class JwtTokenUtil implements InitializingBean {
 

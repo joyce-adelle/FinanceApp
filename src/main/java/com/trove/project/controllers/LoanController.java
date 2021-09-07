@@ -24,6 +24,9 @@ import com.trove.project.models.entities.Loan;
 import com.trove.project.services.LoanService;
 import com.trove.project.services.PaymentService;
 
+/*
+ * Controller to handle user loans
+ */
 @RestController
 @RequestMapping("/api/loans")
 public class LoanController {

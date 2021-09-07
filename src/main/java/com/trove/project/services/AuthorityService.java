@@ -13,13 +13,26 @@ import com.trove.project.models.entities.Authority;
 @Validated
 public interface AuthorityService {
 
+	/**
+	 * Get all possible authorities.
+	 *
+	 * @return all possible authorities.
+	 */
 	@NotNull
 	Iterable<Authority> getAllAuthorities();
 
+	/**
+	 * create a new authority.
+	 *
+	 * @return the newly created authority.
+	 */
 	Authority create(
 			@NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) @NotEquals(notEqualValue = "user") String authorityName)
 			throws ExistsException;
 
+	/**
+	 * remove any authority except "user" authority.
+	 */
 	void remove(
 			@NotNull @Pattern(regexp = "[a-z]+", message = "authority name should be in lower case and without spaces") @Size(min = 4, max = 50) @NotEquals(notEqualValue = "user") String authorityName);
 

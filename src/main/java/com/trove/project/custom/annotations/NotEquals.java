@@ -13,6 +13,9 @@ import javax.validation.Payload;
 
 import com.trove.project.custom.annotations.classes.NotEqualsConstraintValidator;
 
+/*
+ * Annotation to verify that a string is not equal to set value
+ */
 @Constraint(validatedBy = NotEqualsConstraintValidator.class)
 @Target({ PARAMETER, FIELD, TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)

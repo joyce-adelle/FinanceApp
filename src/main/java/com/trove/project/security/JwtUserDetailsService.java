@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Authenticate a user from the database.
+ * Authenticate a user from the database. Custom UserDetailsService class
  */
 @Component("userDetailsService")
 public class JwtUserDetailsService implements UserDetailsService {
@@ -31,8 +31,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(final String login) throws UsernameNotFoundException {
 
 		return userRepository.findOneWithAuthoritiesByUsername(login).map(user -> createSpringSecurityUser(login, user))
-				.orElseThrow(() -> new UsernameNotFoundException(
-						"User with username " + login + " was not found in the database"));
+				.orElseThrow(() -> new UsernameNotFoundException("User was not found in the database"));
 	}
 
 	private UserAwareUserDetails createSpringSecurityUser(String lowercaseLogin, User user) {

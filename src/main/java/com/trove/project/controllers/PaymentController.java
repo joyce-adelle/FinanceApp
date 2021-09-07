@@ -30,6 +30,9 @@ import com.trove.project.models.entities.User;
 import com.trove.project.services.PaymentService;
 import com.trove.project.utilities.PaystackAuthValidator;
 
+/*
+ * Controller to handle all payments
+ */
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
@@ -40,12 +43,13 @@ public class PaymentController {
 	@Value("${paystack.secret}")
 	private String secret;
 
-	@GetMapping(value = { "", "/", "/page" })
+	//admin get payments for a particular user
+	//for verification purposes
+	@GetMapping(value = {"/admin", "/admin/page" })
 	public ResponseEntity<@NotNull Slice<Payment>> getAllPaymentForUser(
 			@RequestParam("userId") @NotNull @Min(1) Long userId, Pageable pageable) {
 
 		return ResponseEntity.ok(this.paymentService.getAllPaymentsForUser(userId, pageable));
-
 	}
 
 	@PostMapping("/verify/loan")

@@ -1,6 +1,5 @@
 package com.trove.project.controllers;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.trove.project.exceptions.ExistsException;
 import com.trove.project.exceptions.IllegalOperationException;
 import com.trove.project.exceptions.InsufficientFundsException;
@@ -18,6 +17,9 @@ import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Handles all exceptions thrown to the api
+ */
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
@@ -26,8 +28,7 @@ public class ApiExceptionHandler {
 		ErrorResponse errors = new ErrorResponse();
 		for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
 			ErrorItem error = new ErrorItem();
-			error.setCode(violation.getMessageTemplate());
-			error.setMessage(violation.getMessage());
+			error.setMessage(violation.getPropertyPath() + ": " + violation.getMessage());
 			errors.addError(error);
 		}
 
@@ -84,18 +85,7 @@ public class ApiExceptionHandler {
 
 	public static class ErrorItem {
 
-		@JsonInclude(JsonInclude.Include.NON_NULL)
-		private String code;
-
 		private String message;
-
-		public String getCode() {
-			return code;
-		}
-
-		public void setCode(String code) {
-			this.code = code;
-		}
 
 		public String getMessage() {
 			return message;

@@ -1,6 +1,7 @@
 package com.trove.project.models.entities;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,6 +17,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/*
+ * User shares in each stock and quantity
+ */
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @Entity
@@ -47,7 +51,8 @@ public class Shares {
 
 	@Transient
 	public BigDecimal getValue() {
-		return this.id.getStock().getPricePerShare().multiply(new BigDecimal(getQuantity())).setScale(2);
+		return this.id.getStock().getPricePerShare().multiply(BigDecimal.valueOf(this.quantity)).setScale(2,
+				RoundingMode.UP);
 	}
 
 	@Override

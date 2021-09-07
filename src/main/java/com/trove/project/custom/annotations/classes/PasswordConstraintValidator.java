@@ -15,6 +15,9 @@ import com.google.common.base.Joiner;
 
 import com.trove.project.custom.annotations.ValidPassword;
 
+/*
+ * Validator for a password
+ */
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
 	@Override
@@ -22,6 +25,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
 	}
 
+	// valid password cannot contain space and must be between 8 to 20 characters
 	@Override
 	public boolean isValid(final String password, final ConstraintValidatorContext context) {
 

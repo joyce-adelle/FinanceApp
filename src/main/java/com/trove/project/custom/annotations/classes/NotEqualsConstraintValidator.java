@@ -5,6 +5,9 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.trove.project.custom.annotations.NotEquals;
 
+/*
+ * Validator for notEqual annotation
+ */
 public class NotEqualsConstraintValidator implements ConstraintValidator<NotEquals, String> {
 	String notEqualValue = "";
 

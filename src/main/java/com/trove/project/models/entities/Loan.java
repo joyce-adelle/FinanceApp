@@ -71,7 +71,7 @@ public class Loan extends Auditable {
 	public BigDecimal getMonthlyPayment() {
 
 		return this.loanAmount
-				.multiply(new BigDecimal(
+				.multiply(BigDecimal.valueOf(
 						(this.monthlyInterestRate * Math.pow(1 + this.monthlyInterestRate, this.numberOfMonths))
 								/ (Math.pow(1 + this.monthlyInterestRate, this.numberOfMonths) - 1)))
 				.setScale(2, RoundingMode.UP);
@@ -80,7 +80,7 @@ public class Loan extends Auditable {
 
 	@Transient
 	public BigDecimal getTotalPayment() {
-		return getMonthlyPayment().multiply(new BigDecimal(this.numberOfMonths)).setScale(2, RoundingMode.UP);
+		return this.getMonthlyPayment().multiply(new BigDecimal(this.numberOfMonths)).setScale(2, RoundingMode.UP);
 	}
 
 	@Transient

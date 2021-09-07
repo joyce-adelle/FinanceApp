@@ -43,7 +43,7 @@ public class Portfolio {
 	@Transient
 	public BigDecimal getTotalValue() {
 
-		BigDecimal sum = new BigDecimal(0.00);
+		BigDecimal sum = new BigDecimal(0);
 		for (Shares share : this.shares) {
 			sum = sum.add(share.getValue());
 		}

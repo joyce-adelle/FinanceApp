@@ -9,6 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/*
+ * Validates response sent from paystack
+ */
 public class PaystackAuthValidator {
 
 	private static final String HMAC_SHA512 = "HmacSHA512";
@@ -18,7 +21,7 @@ public class PaystackAuthValidator {
 		try {
 
 			final byte[] byteKey = key.getBytes(StandardCharsets.UTF_8);
-			
+
 			Mac sha512Hmac = Mac.getInstance(HMAC_SHA512);
 			SecretKeySpec keySpec = new SecretKeySpec(byteKey, HMAC_SHA512);
 			sha512Hmac.init(keySpec);
@@ -30,7 +33,7 @@ public class PaystackAuthValidator {
 		} catch (InvalidKeyException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
 
 	}
