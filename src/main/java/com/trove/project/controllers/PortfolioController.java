@@ -62,11 +62,11 @@ public class PortfolioController {
 		}
 
 		@JsonProperty("total_value")
-		String getIdToken() {
+		String getTotalvalue() {
 			return this.totalValue.toString();
 		}
 
-		void setIdToken(BigDecimal totalValue) {
+		void setTotalvalue(BigDecimal totalValue) {
 			this.totalValue = totalValue;
 		}
 	}
