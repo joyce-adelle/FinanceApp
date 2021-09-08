@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.trove.project.exceptions.ResourceNotFoundException;
-import com.trove.project.models.JwtUser;
 import com.trove.project.models.entities.Portfolio;
 import com.trove.project.repositories.PortfolioRepository;
 import com.trove.project.security.SecurityUtils;
@@ -28,9 +27,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 
 	@Override
 	public @NotNull BigDecimal getTotalPortfolioValue() {
-		JwtUser user = SecurityUtils.getCurrentUser()
-				.orElseThrow(() -> new ResourceNotFoundException("Portfolio not found"));
-		return user.getPortfolioValue();
+
+		return this.getPortfolio().getTotalValue();
 	}
 
 }

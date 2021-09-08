@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getCurrentUserWithAuthorities() {
-		System.out.println(SecurityUtils.getCurrentUsername());
+
 		return SecurityUtils.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found"));
 	}
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void create(@NotNull @Size(min = 4, max = 50) String firstname,
+	public String create(@NotNull @Size(min = 4, max = 50) String firstname,
 			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String username,
 			@NotNull @Email @Size(min = 1, max = 50) String email, @NotNull @ValidPassword String password)
 			throws ExistsException, TransactionException {
@@ -133,15 +133,19 @@ public class UserServiceImpl implements UserService {
 		user.setPortfolio(portfolio);
 		portfolio.setUser(user);
 
-		userRepository.save(user);
+//		try {
+//			this.verifyInit(email, email, firstname, "welcome");
+//		} catch (MessagingException e) {
+//			System.out.print(e.getMessage());
+//			throw new TransactionException("error occurred while sending verification mail");
+//		} catch (MailSendException e) {
+//			System.out.print(e.getMessage());
+//			throw new TransactionException("error occurred while sending verification mail");
+//		}
+		
+		User newUser = userRepository.save(user);
 
-		try {
-			verifyInit(email, email, firstname, "welcome");
-		} catch (MessagingException e) {
-			throw new TransactionException();
-		} catch (MailSendException e) {
-			throw new TransactionException();
-		}
+		return this.login(newUser.getUsername(), password, false);
 
 	}
 

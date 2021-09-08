@@ -38,7 +38,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
 				.map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
 		JwtUser jwtUser = new JwtUser(user.getId(), user.getFirstname(), user.getLastname(), user.getUsername(),
-				user.getEmail(), user.isVerified(), user.getPassword(), user.getPortfolio().getTotalValue());
+				user.getEmail(), user.isVerified(), user.getPassword());
 		return new UserAwareUserDetails(jwtUser, grantedAuthorities);
 	}
 }

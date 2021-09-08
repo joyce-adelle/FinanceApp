@@ -47,8 +47,10 @@ public interface UserService {
 
 	/**
 	 * Creates new user.
+	 * 
+	 * @return jwt token to be used for authorization.
 	 */
-	void create(@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
+	String create(@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
 			@NotNull @Size(min = 4, max = 50) String username, @NotNull @Email @Size(min = 1, max = 50) String email,
 			@NotNull @ValidPassword String password) throws ExistsException, TransactionException;
 

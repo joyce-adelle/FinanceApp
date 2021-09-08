@@ -20,9 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.trove.project.exceptions.IllegalOperationException;
 import com.trove.project.exceptions.ResourceNotFoundException;
 import com.trove.project.models.BankAccount;
-import com.trove.project.models.JwtUser;
 import com.trove.project.models.entities.Loan;
+import com.trove.project.models.entities.User;
 import com.trove.project.repositories.LoanRepository;
+import com.trove.project.repositories.UserRepository;
 import com.trove.project.security.SecurityUtils;
 import com.trove.project.services.LoanService;
 
@@ -33,17 +34,21 @@ public class LoanServiceImpl implements LoanService {
 	@Autowired
 	LoanRepository loanRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
 	public @NotNull Loan takeLoan(
 			@NotNull @DecimalMin(value = "1.0", inclusive = true) @Digits(integer = 7, fraction = 2) BigDecimal amount,
 			@NotNull @Min(6) @Max(12) Integer numberOfMonths, @NotNull @Valid BankAccount bankAccount)
 			throws IllegalOperationException {
 
-		JwtUser user = SecurityUtils.getCurrentUser()
+		User user = SecurityUtils.getCurrentUserId().flatMap(userRepository::findById)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found"));
-		BigDecimal value = user.getPortfolioValue();
-		BigDecimal maxLoan = value.multiply(new BigDecimal(0.6)).setScale(2, RoundingMode.UP);
-
+		BigDecimal value = user.getPortfolio().getTotalValue();
+		System.out.println(value);
+		BigDecimal maxLoan = value.multiply(BigDecimal.valueOf(0.6)).setScale(2, RoundingMode.UP);
+		System.out.println(maxLoan);
 		if (amount.subtract(maxLoan).signum() > 0)
 			throw new IllegalOperationException("cannot loan that amount. maximum loan is " + maxLoan);
 
@@ -52,7 +57,7 @@ public class LoanServiceImpl implements LoanService {
 
 		// code to send money to bank account
 
-		//fixed 18% annual interest
+		// fixed 18% annual interest
 		return this.loanRepository.save(new Loan(0.015, numberOfMonths, amount));
 	}
 

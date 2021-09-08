@@ -28,7 +28,7 @@ import com.trove.project.services.PaymentService;
  * Controller to handle user loans
  */
 @RestController
-@RequestMapping("/api/loans")
+@RequestMapping("/api/users/user/loans")
 public class LoanController {
 
 	@Autowired
@@ -61,7 +61,8 @@ public class LoanController {
 	public ResponseEntity<InitializePaymentWithPaystackDto> payPeriodicLoanViaPaystack()
 			throws TransactionException, IllegalOperationException {
 
-		return ResponseEntity.ok(new InitializePaymentWithPaystackDto(this.paymentService.payPeriodicLoanViaPaystack()));
+		return ResponseEntity
+				.ok(new InitializePaymentWithPaystackDto(this.paymentService.payPeriodicLoanViaPaystack()));
 	}
 
 }

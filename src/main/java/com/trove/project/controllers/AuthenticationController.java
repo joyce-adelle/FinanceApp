@@ -49,15 +49,21 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/signup")
-	ResponseEntity<CompletedRequestDto> signUp(@RequestBody @Valid @NotNull(message = "The user cannot be null.") SignUpDto user)
+	public ResponseEntity<JwtToken> signUp(
+			@RequestBody @Valid @NotNull(message = "The user cannot be null.") SignUpDto user)
 			throws ExistsException, TransactionException {
 
-		userService.create(user.getFirstname(), user.getLastname(), user.getUsername(), user.getEmail(), user.getPassword());;
-		return ResponseEntity.ok(new CompletedRequestDto(true));
+		String jwt = userService.create(user.getFirstname(), user.getLastname(), user.getUsername(), user.getEmail(),
+				user.getPassword());
+
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+		return new ResponseEntity<>(new JwtToken(jwt), httpHeaders, HttpStatus.OK);
 	}
 
 	@PostMapping("/forgot-password")
-	ResponseEntity<CompletedRequestDto> forgotPassword(@RequestBody @Valid UsernameDto username)
+	public ResponseEntity<CompletedRequestDto> forgotPassword(@RequestBody @Valid UsernameDto username)
 			throws ExistsException, TransactionException {
 
 		userService.forgotPasswordInit(username.getUsername());

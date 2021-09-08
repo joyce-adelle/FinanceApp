@@ -1,6 +1,7 @@
 package com.trove.project.services.implementations;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 import javax.validation.constraints.Min;
@@ -48,7 +49,7 @@ public class SharesServiceImpl implements SharesService {
 		User user = SecurityUtils.getCurrentUserId().flatMap(userRepository::findById)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-		BigDecimal cost = stock.getPricePerShare().multiply(new BigDecimal(quantity));
+		BigDecimal cost = stock.getPricePerShare().multiply(BigDecimal.valueOf(quantity)).setScale(2, RoundingMode.UP);
 		BigDecimal wallet = user.getWallet().subtract(cost);
 		if (wallet.signum() >= 0) {
 			Optional<Shares> share = this.sharesRepository.findOneByIdUserAndIdStock(user, stock);
@@ -59,8 +60,9 @@ public class SharesServiceImpl implements SharesService {
 				shares.setQuantity(shares.getQuantity() + quantity);
 				this.sharesRepository.save(shares);
 			}
-
-			this.sharesRepository.save(new Shares(user, stock, quantity));
+			else
+				this.sharesRepository.save(new Shares(user, stock, quantity));
+			
 			return this.userRepository.save(user).getPortfolio();
 		} else
 			throw new InsufficientFundsException("not enough money in wallet to buy shares");
@@ -79,7 +81,8 @@ public class SharesServiceImpl implements SharesService {
 		if (quantity > share.getQuantity())
 			throw new InsufficientFundsException("not enough shares to sell");
 
-		BigDecimal profit = stock.getPricePerShare().multiply(new BigDecimal(quantity));
+		BigDecimal profit = stock.getPricePerShare().multiply(BigDecimal.valueOf(quantity)).setScale(2,
+				RoundingMode.UP);
 		user.setWallet(user.getWallet().add(profit));
 		Double newQuantity = share.getQuantity() - quantity;
 
